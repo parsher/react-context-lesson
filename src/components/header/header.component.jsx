@@ -1,18 +1,17 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
 import { auth } from "../../firebase/firebase.utils";
 import CartIcon from "../cart-icon/cart-icon.component";
 import CartDropdown from "../cart-dropdown/cart-dropdown.component";
-import CartContext from "../../contexts/cart/cart.context";
+import { CartContext } from "../../providers/cart/cart.provider";
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 import CurrentUserContext from "../../contexts/current-user/current-user.context";
 import "./header.styles.scss";
 
 const Header = () => {
   const currentUser = useContext(CurrentUserContext); // to consume the context, use the useContext function
-  const [hidden, setHidden] = useState(true); // set local state and function
-  const toggleHidden = () => setHidden(!hidden); // define local method
+  const { hidden } = useContext(CartContext);
 
   return (
     <div className="header">
@@ -35,10 +34,8 @@ const Header = () => {
             SIGN IN
           </Link>
         )}
-        {/* set the value to provider to provide the object :Context is like a vehicle to transfer some objects */}
-        <CartContext.Provider value={{ hidden, toggleHidden }}>
-          <CartIcon />
-        </CartContext.Provider>
+
+        <CartIcon />
       </div>
       {hidden ? null : <CartDropdown />}
     </div>
